@@ -1,0 +1,10 @@
+RewriteEngine on
+
+RewriteRule (.+)\.v\d+\.(js|min\.js)(.*)  $1.$2$3  [QSA]
+
+RewriteCond %{HTTP:Accept-encoding}  gzip
+RewriteCond %{REQUEST_FILENAME}\.gz  -s
+RewriteRule (.*)\.js  $1\.js\.gz  [QSA]
+
+AddEncoding  x-gzip  .gz
+AddType  "text/javascript; charset=utf-8"  .gz

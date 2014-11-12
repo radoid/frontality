@@ -1,0 +1,10 @@
+RewriteEngine on
+
+RewriteRule (.+)\.v\d+\.(css|min\.css)(.*)  $1.$2$3  [QSA]
+
+RewriteCond %{HTTP:Accept-encoding}  gzip
+RewriteCond %{REQUEST_FILENAME}\.gz  -s
+RewriteRule (.*)\.css  $1\.css\.gz  [QSA]
+
+AddEncoding  x-gzip  .gz
+AddType  "text/css; charset=utf-8"  .gz
