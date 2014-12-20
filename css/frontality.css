@@ -6,7 +6,6 @@
 .cells {
   display: block; }
 
-
 /* Phone and up */
 /* Tablet and up */
 @media (min-width: 768px) {
@@ -126,13 +125,13 @@ button {
   text-align: center;
   text-decoration: none !important; }
 
-.button:active,
-button:active {
+.button:active:not(:disabled),
+button:active:not(:disabled) {
   background: #3483a8;
   color: white; }
 
-.button:focus,
-button:focus {
+.button:focus:not(:disabled),
+button:focus:not(:disabled) {
   background: #3483a8;
   color: white; }
 

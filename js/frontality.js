@@ -129,3 +129,85 @@ var DEBUG;
 
 }) (window.jQuery || window.Zepto || window.$);
 
+
+/* AJAX Buttons */
+
+(function ($) {
+
+	$.extend ($.fn, {
+
+		'ajax': function (method, url, data, success, error, progress) {
+			var $button = this;
+			var pressable = (this[0].tagName == "BUTTON");
+			$button.prop('disabled', true);
+			//if (pressable)
+			//	$button.loading(true);
+			var formdata, i;
+			if (data instanceof $)
+				if (data[0] && data[0].files && typeof FormData != 'undefined')
+					for (formdata = new FormData(), i=0; i < data[0].files.length; i++)
+						//if (DEBUG) console.log('Upload '+i+' start', data[0].files[i]);
+						formdata.append("upload"+i, data[0].files[i]);
+				else
+					data = (typeof FormData != 'undefined' ? (formdata = new FormData(data[0])) : data.serialize());
+			if (typeof progress == "function")
+				progress.call($button[0], 0);
+			$.ajax(url, {type: method, cache: false, data: formdata || data,
+				processData: !formdata,
+	        	contentType: (formdata ? false : $.ajaxSettings.contentType),
+				beforeSend: function(jqxhr, settings) {
+					jqxhr.setRequestHeader('Accept', '*/json');
+				},
+				xhr: function () {
+					var xhr = $.ajaxSettings.xhr();
+					if (xhr.upload && typeof progress == 'function')
+						xhr.upload.addEventListener('progress', function (e) {
+							if (DEBUG) console.log('Upload progress:', e.loaded, e.total);
+							if (e.lengthComputable && typeof progress == "function")
+								progress.call($button[0], Math.floor(e.loaded / e.total * 100));
+						}, false);
+					return xhr;
+				}})
+				.always (function () {
+					var xhr = (arguments[1] == "success" ? arguments[2] : arguments[0]);
+					var response = (arguments[1] == "success" ? arguments[0] : xhr.responseText);
+					if (typeof response == "string")
+						try {response = $.parseJSON(response)} catch (e) {}
+					if (DEBUG) console.log ("ajaxPress:", xhr.status, xhr.statusText, response);
+					$button.prop('disabled', false);
+					//if (pressable)
+					//	$button.loading(false);
+					var errormessage;
+					if (xhr.status >= 400 || xhr.status < 200)
+						errormessage = (response && typeof response == "object" ? response : xhr.statusText);
+					else if (!response || typeof response != "object")
+						errormessage = "Sorry, invalid response from server.";
+					else
+						if (typeof success == "function")
+							if (success.call ($button[0], response, xhr) === false)
+								errormessage = (typeof error == "string" ? error : "Sorry, response was invalidated.");
+					if (errormessage && typeof error == "function")
+						error.call($button[0], errormessage, xhr);
+				});
+			return this;
+		},
+
+		'get': function (url, success, error, progress) {
+			return this.ajax('GET', url, undefined, success, error, progress);
+		},
+
+		'post': function (url, data, success, error, progress) {
+			return this.ajax('POST', url, data, success, error, progress);
+		},
+
+		'put': function (url, data, success, error, progress) {
+			return this.ajax('PUT', url, data, success, error, progress);
+		},
+
+		'delete': function (url, success, error, progress) {
+			return this.ajax('DELETE', url, undefined, success, error, progress);
+		}
+
+	});
+
+}) (window.jQuery || window.Zepto || window.$);
