@@ -25,7 +25,6 @@
   .cell,
   .cells {
     display: table-cell;
-    xword-break: break-all;
     overflow: hidden; }
 
   .half.cell {
@@ -237,7 +236,8 @@ div.success {
 .collapse {
   height: 0;
   overflow: hidden;
-  transition: height 0.2s cubic-bezier(0, 0.5, 0.5, 1); }
+  transition: height 0.2s cubic-bezier(0, 0.5, 0.5, 1);
+  will-change: height; }
 
 [data-toggle] {
   cursor: pointer;
@@ -245,6 +245,39 @@ div.success {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+/* Covers */
+.cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  text-align: center; }
+
+.cover-under {
+  visibility: hidden; }
+
+.cover-content {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  font-size: 175%; }
+
+.cover-loading svg {
+  xxxheight: 20px;
+  vertical-align: middle; }
+
+.cover-loading svg {
+  height: 60px;
+  vertical-align: middle;
+  fill: #3483a8; }
+
+[type="submit"] > .cover-loading svg,
+.submit > .cover-loading svg {
+  fill: white; }
 
 /* Common utility classes */
 .text-left {

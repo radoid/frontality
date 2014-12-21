@@ -97,6 +97,21 @@ var DEBUG;
 				}
 
 			return this;
+		},
+
+		'cover': function (state, content) {
+			var $element = (this.hasClass('modal') ? $('.modal-content', this) : this);
+			if (state || state === undefined)
+				$element.css({position: 'relative'}).wrapInner('<div class="cover-under">').append($('<div class="cover '+(state||'')+'"><div class="cover-content">'+(content||'')+'</div></div>'));
+			else
+				$element.html($element.children('.cover-under')[0].childNodes);
+			return this;
+		},
+
+		'loading': function (state) {
+			if (state || state === undefined)
+				return this.cover('cover-loading', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle transform="translate(8 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle><circle transform="translate(16 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.3" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle><circle transform="translate(24 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle></svg>');
+			return this.cover(false);
 		}
 
 	});
