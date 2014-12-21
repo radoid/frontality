@@ -233,7 +233,20 @@ div.success {
   line-height: 23px;
   text-align: center; }
 
-/* Common */
+/* Collapse */
+.collapse {
+  height: 0;
+  overflow: hidden;
+  transition: height 0.2s cubic-bezier(0, 0.5, 0.5, 1); }
+
+[data-toggle] {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+/* Common utility classes */
 .text-left {
   text-align: left; }
 

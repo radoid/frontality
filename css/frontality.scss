@@ -121,7 +121,12 @@ div.success { background-color: darkgreen; color: white }
 .modal-narrow { max-width: 320px }
 .close { float: right; color: $dark; cursor: pointer; min-width: 23px; font-size: 23px; line-height: 23px; text-align: center }
 
-/* Common */
+/* Collapse */
+
+.collapse { height: 0; overflow: hidden; transition: height 0.2s cubic-bezier(0,.5,.5,1) }
+[data-toggle] { cursor: pointer; @include user-select }
+
+/* Common utility classes */
 
 .text-left { text-align: left }
 .text-center { text-align: center }

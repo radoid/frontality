@@ -10,18 +10,18 @@ var DEBUG;
 		'collapse': function (options) {
 			var $element = this;
 			if (options == 'toggle') {
-				options = (this[0].offsetHeight ? 'hide' : 'show');
+				options = ($element.hasClass('in') ? 'hide' : 'show');
 			}
 			if (options == 'show') {
-				this.trigger('show');
-				$(this).css('height', this[0].scrollHeight + 'px');
+				$element.addClass('in').trigger('show');
+				$element.css('height', this[0].scrollHeight + 'px');
 				setTimeout(function () {
 					$element.trigger('shown')
 				}, 200);
 			}
 			if (options == 'hide') {
-				this.trigger('hide');
-				$(this).css('height', '0');
+				$element.removeClass('in').trigger('hide');
+				$element.css('height', '0');
 				setTimeout(function () {
 					$element.trigger('hidden')
 				}, 200);
@@ -33,11 +33,9 @@ var DEBUG;
 
 	$(document).ready(function () {
 		$('[data-toggle="collapse"][href], [data-toggle="collapse"][data-target]').click(function () {
-			$(this.href || $(this).data('target')).collapse('toggle');
-		});
-		$('[data-toggle="accordion"]').click(function () {
-			$(this).siblings('[data-toggle="accordion"]').next('.collapse').collapse('hide');
-			$(this).next('.collapse').collapse('toggle');
+			var $collapse = $(this.href || $(this).data('target')).collapse('toggle');
+			if ($collapse.data('parent'))
+				$($collapse.data('parent')).find('.collapse.in').not($collapse).collapse('hide');
 		});
 	});
 
