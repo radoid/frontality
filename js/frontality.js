@@ -2,6 +2,7 @@
 
 var DEBUG;
 
+
 /* Collapse & Accordion */
 
 (function ($) {
@@ -16,15 +17,17 @@ var DEBUG;
 				$element.addClass('in').trigger('show');
 				$element.css('height', this[0].scrollHeight + 'px');
 				setTimeout(function () {
-					$element.trigger('shown')
-				}, 200);
+					$element.trigger('shown');
+					if ($element.offset().top < $(window).scrollTop() || $element.height() > $(window).height())
+						$('html, body').animate({scrollTop: $element.offset().top - 50});
+				}, 220);
 			}
 			if (options == 'hide') {
 				$element.removeClass('in').trigger('hide');
 				$element.css('height', '0');
 				setTimeout(function () {
-					$element.trigger('hidden')
-				}, 200);
+					$element.trigger('hidden');
+				}, 220);
 			}
 			return this;
 		}
@@ -34,12 +37,11 @@ var DEBUG;
 	$(document).ready(function () {
 		$('[data-toggle="collapse"][href], [data-toggle="collapse"][data-target]').click(function () {
 			var $collapse = $(this.href || $(this).data('target')).collapse('toggle');
-			if ($collapse.data('parent'))
-				$($collapse.data('parent')).find('.collapse.in').not($collapse).collapse('hide');
+			$($(this).data('parent')).find('.collapse.in').not($collapse).collapse('hide');
 		});
 	});
 
-}) (window.jQuery || window.Zepto || window.$);
+}) (window.jQuery || window.Zepto);
 
 
 /* Modal */
@@ -97,21 +99,6 @@ var DEBUG;
 				}
 
 			return this;
-		},
-
-		'cover': function (state, content) {
-			var $element = (this.hasClass('modal') ? $('.modal-content', this) : this);
-			if (state || state === undefined)
-				$element.css({position: 'relative'}).wrapInner('<div class="cover-under">').append($('<div class="cover '+(state||'')+'"><div class="cover-content">'+(content||'')+'</div></div>'));
-			else
-				$element.html($element.children('.cover-under')[0].childNodes);
-			return this;
-		},
-
-		'loading': function (state) {
-			if (state || state === undefined)
-				return this.cover('cover-loading', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle transform="translate(8 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle><circle transform="translate(16 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.3" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle><circle transform="translate(24 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle></svg>');
-			return this.cover(false);
 		}
 
 	});
@@ -140,7 +127,33 @@ var DEBUG;
 		})
 	});
 
-}) (window.jQuery || window.Zepto || window.$);
+}) (window.jQuery || window.Zepto);
+
+
+/* Covers */
+
+(function ($) {
+
+	$.extend ($.fn, {
+
+		'cover': function (state, content) {
+			var $element = (this.hasClass('modal') ? $('.modal-content', this) : this);
+			if (state || state === undefined)
+				$element.css({position: 'relative'}).wrapInner('<div class="cover-under">').append($('<div class="cover ' + (state || '') + '"><div class="cover-content">' + (content || '') + '</div></div>'));
+			else
+				$element.html($element.children('.cover-under')[0].childNodes);
+			return this;
+		},
+
+		'loading': function (state) {
+			if (state || state === undefined)
+				return this.cover('cover-loading', '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle transform="translate(8 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle><circle transform="translate(16 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.3" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle><circle transform="translate(24 0)" cx="0" cy="16" r="0"><animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6" keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" /></circle></svg>');
+			return this.cover(false);
+		}
+
+	});
+
+}) (window.jQuery || window.Zepto);
 
 
 /* AJAX Buttons */
@@ -223,4 +236,4 @@ var DEBUG;
 
 	});
 
-}) (window.jQuery || window.Zepto || window.$);
+}) (window.jQuery || window.Zepto);
