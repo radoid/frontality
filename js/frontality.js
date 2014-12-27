@@ -52,12 +52,7 @@ var DEBUG;
 		'modal': function (options) {
 			var $element = this;
 			var $container = this.data('container') || $(
-				'<div class="modal-container">' +
-					'<div class="modal-backdrop"></div>' +
-					'<div class="modal-centered-table">' +
-						'<div class="modal-centered-content"></div>' +
-					'</div>' +
-				'</div>')
+				'<div class="modal-backdrop"></div>')
 					.on('mousedown', '.modal', function (e) {
 						e.stopImmediatePropagation();
 					})
@@ -75,7 +70,7 @@ var DEBUG;
 					this.trigger('show');
 					var level = +$(document.body).data('modal_level') + 1 || 1;
 					this.data({container: $container, 'modal_level': level});
-					$('.modal-centered-content', $container).append(this.css('display', 'inline-block'));
+					$container.append(this.css({display: 'inline-block'})).css({display: 'flex'});
 					$(document.body).append($container.show()).addClass('modal-open').data('modal_level', level);
 					this.trigger('shown');
 
@@ -104,13 +99,13 @@ var DEBUG;
 	});
 
 	$.dialog = function (title, html, buttons) {
-		var $modal = $('#modal-generic-dialog').length ? $('#modal-generic-dialog') : $(
+		var $modal = $('#frontality-generic-dialog').length ? $('#frontality-generic-dialog') : $(
 			'<div id="modal-generic-dialog" class="modal modal-dialog modal-narrow">' +
+				'<span class="close" data-dismiss="modal">&times;</span>' +
 				'<h3 class="modal-header">' +
-					'<div class="close" data-dismiss="modal">&times;</div>' +
 				'</h3>' +
 				'<div class="modal-body"></div>' +
-				'<div class="modal-footer button-group"></div>' +
+				'<div class="modal-footer"></div>' +
 			'</div>');
 		$('.modal-header', $modal).text(title);
 		$('.modal-body', $modal).html(html);
@@ -123,7 +118,7 @@ var DEBUG;
 
 	$(document).ready(function () {
 		$('[data-toggle="modal"][href], [data-toggle="modal"][data-target]').click(function () {
-			$(this.href || $(this).data('target')).modal('show');
+			$($(this).attr('href') || $(this).data('target')).modal('show');
 		})
 	});
 
